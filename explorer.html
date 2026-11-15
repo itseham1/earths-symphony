@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,37 +20,74 @@
 
 <body>
   <header class="topbar">
-    <a class="brand" href="index.html">✦ SONOVA</a>
+    <a class="brand" href="index.html"><span class="brand-star">✦</span> SONOVA</a>
     <span>EARTH'S SYMPHONY</span>
     <a class="back" href="index.html">← Home</a>
   </header>
 
   <main class="shell">
     <div class="page-title">
-      <p class="eyebrow">THE EARTH INFORMATION JUKEBOX</p>
+      
       <h1>Explore the <span>Earth.</span></h1>
       <p>Discover our planet's night lights beyond sight.</p>
     </div>
 
     <div class="workspace">
-      <!-- Left panel -->
-      <aside class="panel">
+
+      <!-- LEFT: sound layer, region, year -->
+      <aside class="panel" aria-label="Controls">
         <span class="section-tag">01 / DATA LAYER</span>
         <h2>Audio Layers</h2>
 
+        <div class="layer-card">
         <div class="active-layer">
           <span class="layer-icon">✦</span>
           <div>
             <strong>Night Lights</strong>
             <small>NASA Black Marble</small>
           </div>
-          <span class="active-dot" aria-label="Selected"></span>
+          <label class="switch" title="Night Lights sound on/off">
+            <input type="checkbox" id="layerLights" checked disabled aria-label="Night Lights sound">
+            <span class="knob"></span>
+          </label>
         </div>
 
-        <p class="note">
-          Additional Earth data layers will be added
-          after the Night Lights experience is complete.
-        </p>
+        
+<section class="brightness-guide" id="legendBrightness"
+         aria-label="Night light brightness scale">
+  <h3>Night Light Brightness</h3>
+  <div class="brightness-gradient" role="img"
+       aria-label="0 darker, 50 moderate, 100 brighter"></div>
+  <div class="brightness-ticks">
+    <span><b>0</b><small>Darker</small></span>
+    <span><b>50</b><small>Moderate</small></span>
+    <span><b>100</b><small>Brighter</small></span>
+  </div>
+  <p>Relative scale · image-derived</p>
+</section>
+
+<section class="sonova-nasa-legend" id="legendChange" hidden
+         aria-label="Change in night light brightness">
+  <h3>Change in Brightness</h3>
+  <p class="legend-years">2012 → 2023</p>
+
+  <div class="nasa-colorbar" role="img"
+       aria-label="Orange: lights out. White: no change. Purple: new lights.">
+  </div>
+
+  <div class="nasa-color-labels">
+    <span>Lights out</span>
+    <span>No change</span>
+    <span>New lights</span>
+  </div>
+</section>
+
+
+<!-- SONOVA NASA CHANGE LEGEND -->
+        </div>
+
+
+
 
         <hr>
 
@@ -61,47 +97,94 @@
           <option value="riyadh">Riyadh, Saudi Arabia</option>
           <option value="delhi">Delhi, India</option>
           <option value="london">London, United Kingdom</option>
+          <option value="paris">Paris, France</option>
+          <option value="kyiv">Kyiv, Ukraine</option>
+          <option value="cairo">Cairo, Egypt</option>
+          <option value="tokyo">Tokyo, Japan</option>
+          <option value="newyork">New York, USA</option>
+          <option value="lagos">Lagos, Nigeria</option>
         </select>
 
-        <p class="helper">
-          Drag to rotate · Scroll to zoom · Click Earth
-          to focus · Or select a region above.
-        </p>
+        <fieldset class="years-set">
+          <legend>Select Year</legend>
+          <div class="yearbox">
+            <output id="yearBig" for="year">2023</output>
+            <input id="year" type="range" min="0" max="11" step="1" value="11"
+                   aria-label="Year" aria-valuetext="2023">
+          </div>
+          <div class="years"><span>2012</span><span>2023</span></div>
+          <button id="changeBtn" class="toggle" type="button" aria-pressed="false">
+            ◐ Show the Change · 2012 → 2023
+          </button>
+        </fieldset>
 
         <button id="resetView" class="secondary-btn">
           <span aria-hidden="true">↺</span> Reset View
         </button>
       </aside>
 
-      <!-- 3D globe -->
+      <!-- CENTER: 3D globe -->
       <section class="globe-section" aria-label="3D Earth explorer">
         <div class="globe-head">
           <span class="live-tag">● NASA VISUALIZATION</span>
-          <span class="globe-hint">INTERACTIVE 3D</span>
+          <div class="head-right">
+            <button id="soundSettingsBtn" class="chip" type="button" aria-expanded="false"
+                    aria-controls="soundSettings" aria-label="Sound settings">⚙ Sound settings</button>
+            <button id="soundChip" class="chip" type="button">🔈 Click to enable sound</button>
+          </div>
         </div>
 
-        <div id="globeCanvas" class="globe-canvas"
-             aria-label="Interactive NASA Earth at night globe">
+        <div id="soundSettings" class="sound-settings" role="group" aria-label="Sound settings" hidden>
+          <label for="volume">Volume</label>
+          <input id="volume" type="range" min="0" max="100" value="70">
+          <label class="check"><input type="checkbox" id="mono"> Mono audio (same sound in both ears)</label>
         </div>
 
-        <p class="globe-caption">
-          NASA SVS imagery · Visualization preview
+        <div id="globeCanvas" class="globe-canvas" tabindex="0" role="application"
+             aria-label="Interactive Earth at night. Arrow keys move a listening point, Enter selects the region, T plays the Time Machine."
+             aria-describedby="globeHelp"></div>
+
+        <div class="globe-actions">
+          <button id="listenDiff" class="action-btn primary-btn" type="button">
+            <span class="btn-title">▶ Listen to the Difference</span>
+            <span class="btn-sub">Compare 2012 and 2023</span>
+          </button>
+          <button id="timeMachine" class="action-btn tm-btn" type="button">
+            <span class="btn-title">⏳ Time Machine</span>
+            <span class="btn-sub">Every year, 2012 → 2023</span>
+          </button>
+          <button id="soundGuideBtn" class="action-btn guide-btn" type="button" aria-controls="soundToast">
+            <span class="btn-title">♫ How it sounds</span>
+            <span class="btn-sub">What the notes mean</span>
+          </button>
+        </div>
+
+        <p id="globeHelp" class="globe-caption">
+          Move over the Earth · Click to zoom and hear the location and year ·
+          Keys: ← ↑ ↓ → move · Enter select · Space difference · T time machine ·
+          PgUp / PgDn year · C change · Esc reset
         </p>
-
-        <video id="nasaVideo" muted loop playsinline
-               preload="auto" hidden>
-          <source src="assets/nasa-timeline.mp4" type="video/mp4">
-        </video>
       </section>
 
-      <!-- Right panel -->
-      <aside class="panel">
+      <!-- RIGHT: region details -->
+      <aside class="panel" aria-label="Region details">
         <span class="section-tag">02 / EXPLORATION</span>
         <h2>Region Details</h2>
 
-        <div class="detail">
+        <div class="place-head">
           <span>SELECTED LOCATION</span>
           <strong id="regionName">Global View</strong>
+        </div>
+
+        <div class="description">
+          <h3>Scientific Description</h3>
+          <p id="regionDescription" class="lead">
+            Choose a location to explore its nighttime illumination.
+            Move over the Earth to hear it.
+          </p>
+          <p class="fineprint">
+            Brighter lights do not necessarily mean a better economy.
+          </p>
         </div>
 
         <div class="detail">
@@ -110,73 +193,405 @@
         </div>
 
         <div class="detail">
-          <span>CURRENT YEAR SELECTION</span>
-          <strong id="detailYear">2012</strong>
+          <span>RELATIVE NIGHT LIGHT BRIGHTNESS (0–100)</span>
+          <div class="now"><b id="valNow">—</b><em id="yearNow">2023</em></div>
+          <div class="bar"><i id="barNow"></i></div>
+          <svg id="spark" class="spark" viewBox="0 0 240 70" role="img"
+               aria-label="Light history chart. Choose a region first."></svg>
+          <p class="delta">2012 → 2023: <b id="delta">—</b></p>
         </div>
 
-        <div class="detail">
-          <span>LIGHT INTENSITY</span>
-          <strong class="pending">Awaiting NASA Data</strong>
-        </div>
 
-        <div class="description">
-          <h3>Scientific Description</h3>
-          <p id="regionDescription">
-            Choose a location to explore its nighttime
-            illumination. Verified numerical measurements
-            will appear when data processing is complete.
-          </p>
-        </div>
+
+        
       </aside>
     </div>
 
-    <!-- Bottom timeline -->
-    <section class="timeline-panel">
-      <div class="timeline-heading">
-        <div>
-          <span class="section-tag">03 / TIME EXPLORATION</span>
-          <h2>Journey Through Time</h2>
+    <p id="globeStatus" role="status" aria-live="polite" class="screen-status">Loading NASA visualization...</p>
+
+    <aside id="soundToast" class="sound-toast" role="dialog" aria-label="How it sounds" hidden>
+      <button type="button" class="toast-close" aria-label="Close">✕</button>
+      <h3>♫ How it sounds</h3>
+      <ul>
+        <li>Brighter lights → higher and louder</li>
+        <li>West → left ear · East → right ear</li>
+        <li>Rising tone = the lights increased over time</li>
+        <li>Falling tone = the lights decreased over time</li>
+        <li>Steady tone = no change</li>
+      </ul>
+    </aside>
+
+
+    <!-- SONOVA USER MAP UPLOAD -->
+    <details id="sonovaUpload" class="sonova-upload">
+      <summary>🎵 Sonify Your Map <span>Upload a light map</span></summary>
+    
+      <div class="sonova-upload-body">
+        <p>
+          Upload a night-light image and press Play to hear the whole image.
+          Brighter pixels create higher notes.
+        </p>
+    
+        <div class="sonova-upload-tools">
+          <label for="sonovaMapFile">Choose a PNG or JPG image</label>
+          <input id="sonovaMapFile" type="file"
+                 accept="image/png,image/jpeg,image/webp">
+    
+          
+    
+    
+    <button id="sonovaMapSound" type="button">▶ Play map</button>
+          <button id="sonovaMapReplay" type="button" hidden>
+    <svg class="sonova-replay-icon"
+         viewBox="0 0 24 24"
+         width="18" height="18"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         aria-hidden="true">
+      <path d="M3 12a9 9 0 1 0 3-6.7"/>
+      <path d="M3 3v6h6"/>
+    </svg>
+    Replay
+    </button>
+      <button id="sonovaMapChange" type="button" hidden>🖼 Change image</button>
         </div>
-        <strong id="yearDisplay">2012</strong>
-      </div>
-
-      <div class="timeline-controls">
-        <button id="playTimeline" class="primary-btn">
-          ▶ Preview Timeline
-        </button>
-
-        <div class="slider-wrap">
-          <label for="yearSlider">Select Year</label>
-          <input id="yearSlider" type="range"
-                 min="2012" max="2023"
-                 step="1" value="2012">
-          <div class="years">
-            <span>2012</span>
-            <span>2023</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="timeline-notice">
-        Timeline controls are a UI preview. The NASA animation
-        currently plays independently; year-by-year
-        synchronization and sonification are not connected yet.
+    
+        <p id="sonovaMapStatus" role="status" aria-live="polite">
+          Choose an image to begin.
+        </p>
+    
+        
+    <div class="sonova-map-layout">
+    <div id="sonovaMapStage" class="sonova-map-stage" hidden>
+    <canvas id="sonovaMapCanvas" hidden
+                aria-label="Uploaded brightness map. An automatic scanner moves from left to right.">
+        </canvas>
+    <div id="sonovaMapPlayhead" class="sonova-map-playhead" aria-hidden="true"></div>
+    </div>
+    
+      <aside class="sonova-instrument-panel"
+             aria-label="Choose sound instrument">
+        <label for="sonovaInstrument">Instrument</label>
+        <select id="sonovaInstrument">
+          <option value="piano">🎹 Piano</option>
+          <option value="guitar">🎸 Guitar</option>
+        </select>
+      </aside>
+    </div>
+    
+    <div id="sonovaMapInfo" class="sonova-map-info">
+      <strong>About This Map</strong>
+    
+      <p>
+        <span class="map-info-label">Uploaded image:</span>
+        <span id="sonovaMapFilename">Uploaded map</span>
       </p>
-
-      <div class="audio-placeholder">
-        <span>♫ Sound Time Machine</span>
-        <button disabled aria-label="Audio coming soon">
-          Audio Coming Soon
-        </button>
+    
+      
+    
+      <p>♫ Brighter areas produce higher musical notes.</p>
+    </div>
+    
+    
+    
+        <p id="sonovaMapReading" class="sonova-map-reading"></p>
       </div>
-    </section>
+    </details>
+    
+    <script type="module">
+import { start, uploadedMapInstrumentNote } from './sonify.js';
+/* SONOVA USER MAP SONIFICATION */
+(() => {
+  const fileInput = document.getElementById("sonovaMapFile");
+  const soundButton = document.getElementById("sonovaMapSound");
+  const status = document.getElementById("sonovaMapStatus");
+  const canvas = document.getElementById("sonovaMapCanvas");
+  const reading = document.getElementById("sonovaMapReading");
+  const stage = document.getElementById("sonovaMapStage");
+  const playhead = document.getElementById("sonovaMapPlayhead");
+  const replay = document.getElementById("sonovaMapReplay");
+  const changeBtn = document.getElementById("sonovaMapChange");
 
-    <p id="globeStatus" role="status" aria-live="polite"
-       class="screen-status">Loading NASA visualization...</p>
+  const ctx = canvas.getContext("2d", {willReadFrequently: true});
+
+
+
+  let pixels = null;
+  let listening = false;
+  let lastPlayed = 0;
+  let cursorX = 0.5;
+  let cursorY = 0.5;
+
+  // "Change image": open the file picker again (clear the old choice so the
+  // same file can also be picked twice), and stop any scan that is playing.
+  changeBtn.addEventListener("click", () => {
+    if (playing) pauseScan();
+    fileInput.value = "";
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      status.textContent = "Please choose an image file.";
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      status.textContent = "Please use an image smaller than 20 MB.";
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      const scale = Math.min(
+        1,
+        960 / Math.max(img.naturalWidth, img.naturalHeight)
+      );
+
+      canvas.width = Math.max(
+        1, Math.round(img.naturalWidth * scale)
+      );
+      canvas.height = Math.max(
+        1, Math.round(img.naturalHeight * scale)
+      );
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      pixels = ctx.getImageData(
+        0, 0, canvas.width, canvas.height
+      );
+
+      canvas.hidden = false;
+      document.getElementById("sonovaUpload")?.classList.add("has-image");
+      stage.hidden = false;
+      changeBtn.hidden = false;
+      document.getElementById("sonovaMapFilename").textContent = file.name;
+      resetScan();
+      reading.textContent = "";
+      status.textContent =
+        "Image loaded. Press Play to hear the map.";
+
+      URL.revokeObjectURL(url);
+    };
+
+    img.onerror = () => {
+      status.textContent = "Could not read the image.";
+      URL.revokeObjectURL(url);
+    };
+
+    img.src = url;
+  });
+
+
+  function getBrightness(nx, ny) {
+    if (!pixels) return null;
+
+    const w = pixels.width;
+    const h = pixels.height;
+    const cx = Math.min(w - 1, Math.max(0, Math.floor(nx * w)));
+    const cy = Math.min(h - 1, Math.max(0, Math.floor(ny * h)));
+
+    let sum = 0;
+    let count = 0;
+
+    // Average a small patch to avoid noisy individual pixels.
+    for (let dy = -2; dy <= 2; dy++) {
+      for (let dx = -2; dx <= 2; dx++) {
+        const x = Math.min(w - 1, Math.max(0, cx + dx));
+        const y = Math.min(h - 1, Math.max(0, cy + dy));
+        const p = (y * w + x) * 4;
+        const d = pixels.data;
+
+        const luminance =
+          0.2126 * d[p] +
+          0.7152 * d[p + 1] +
+          0.0722 * d[p + 2];
+
+        sum += luminance / 255;
+        count++;
+      }
+    }
+
+    return sum / count;
+  }
+
+
+  // SONOVA AUTOMATIC UPLOAD SCAN
+  // 72 notes across the image, about 15 seconds.
+  const SCAN_STEPS = 72;
+  const STEP_MS = 210;
+  const TOTAL_MS = SCAN_STEPS * STEP_MS;
+
+  let playing = false;
+  let elapsedMs = 0;
+  let startedAt = 0;
+  let nextStep = 0;
+  let animationId = 0;
+
+  // Extract representative brightness from each vertical strip.
+  // We emphasize its brighter points so small city lights
+  // are not lost in the surrounding darkness.
+  function columnBrightness(x) {
+    const values = [];
+
+    for (let i = 0; i < 30; i++) {
+      const y = (i + 0.5) / 30;
+      const v = getBrightness(x, y);
+
+      if (Number.isFinite(v)) {
+        values.push(Math.max(0, Math.min(1, v)));
+      }
+    }
+
+    if (!values.length) return 0;
+
+    values.sort((a, b) => b - a);
+
+    const count = Math.max(1, Math.ceil(values.length * 0.2));
+    let sum = 0;
+
+    for (let i = 0; i < count; i++) {
+      sum += values[i];
+    }
+
+    return sum / count;
+  }
+
+  function showPosition(progress) {
+    playhead.style.left =
+      (Math.max(0, Math.min(1, progress)) * 100) + "%";
+  }
+
+  function resetScan() {
+    cancelAnimationFrame(animationId);
+    playing = false;
+    elapsedMs = 0;
+    nextStep = 0;
+    showPosition(0);
+
+    soundButton.textContent = "▶ Play map";
+    replay.hidden = !pixels;
+    reading.textContent = "";
+  }
+
+  function pauseScan() {
+    if (!playing) return;
+
+    elapsedMs = Math.min(
+      TOTAL_MS,
+      performance.now() - startedAt
+    );
+
+    playing = false;
+    cancelAnimationFrame(animationId);
+
+    soundButton.textContent = "▶ Resume";
+    status.textContent = "Paused. Press Resume to continue.";
+  }
+
+  function animateScan() {
+    if (!playing) return;
+
+    elapsedMs = Math.min(
+      TOTAL_MS,
+      performance.now() - startedAt
+    );
+
+    const dueStep = Math.floor(elapsedMs / STEP_MS);
+
+    while (
+      nextStep <= dueStep &&
+      nextStep < SCAN_STEPS
+    ) {
+      const x = (nextStep + 0.5) / SCAN_STEPS;
+      const brightness = columnBrightness(x);
+
+      // Same SONOVA sound engine as the globe.
+      uploadedMapInstrumentNote(
+        brightness,
+        x,
+        document.getElementById("sonovaInstrument").value
+      );
+
+      reading.textContent =
+        "Scanning " + (nextStep + 1) +
+        " / " + SCAN_STEPS +
+        " · Relative brightness " +
+        Math.round(brightness * 100) + "/100";
+
+      nextStep++;
+    }
+
+    showPosition(elapsedMs / TOTAL_MS);
+
+    if (elapsedMs >= TOTAL_MS) {
+      playing = false;
+      soundButton.textContent = "▶ Play again";
+      status.textContent =
+        "Sonification complete. Replay to hear it again.";
+      return;
+    }
+
+    animationId = requestAnimationFrame(animateScan);
+  }
+
+  async function playScan(restart = false) {
+    if (!pixels) {
+      status.textContent = "Upload a map first.";
+      return;
+    }
+
+    if (playing && !restart) {
+      pauseScan();
+      return;
+    }
+
+    try {
+      const audioContext = start();
+      await audioContext.resume();
+    } catch (error) {
+      console.error(error);
+      status.textContent = "Unable to start audio.";
+      return;
+    }
+
+    cancelAnimationFrame(animationId);
+
+    if (restart || elapsedMs >= TOTAL_MS) {
+      elapsedMs = 0;
+      nextStep = 0;
+      showPosition(0);
+    }
+
+    startedAt = performance.now() - elapsedMs;
+    playing = true;
+
+    soundButton.textContent = "⏸ Pause";
+    status.textContent =
+      "Playing the map from left to right.";
+
+    animationId = requestAnimationFrame(animateScan);
+  }
+
+  soundButton.addEventListener("click", () => playScan(false));
+  replay.addEventListener("click", () => playScan(true));
+
+  window.addEventListener("pagehide", () => {
+    if (playing) pauseScan();
+  });
+})();
+</script>
 
     <footer>
       NASA Scientific Visualization Studio ·
-      Earth at Night / Black Marble ·
+      Change in Night Lights 2012–2023 · Black Marble (SVS 5276) ·
       Team SONOVA
     </footer>
   </main>
