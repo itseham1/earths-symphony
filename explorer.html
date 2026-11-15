@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Earth Explorer | SONOVA</title>
+  <link rel="stylesheet" href="explorer.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module" src="globe.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">✦ SONOVA</a>
+    <span>EARTH'S SYMPHONY</span>
+    <a class="back" href="index.html">← Home</a>
+  </header>
+
+  <main class="shell">
+    <div class="page-title">
+      <p class="eyebrow">THE EARTH INFORMATION JUKEBOX</p>
+      <h1>Explore the <span>Earth.</span></h1>
+      <p>Discover our planet's night lights beyond sight.</p>
+    </div>
+
+    <div class="workspace">
+      <!-- Left panel -->
+      <aside class="panel">
+        <span class="section-tag">01 / DATA LAYER</span>
+        <h2>Audio Layers</h2>
+
+        <div class="active-layer">
+          <span class="layer-icon">✦</span>
+          <div>
+            <strong>Night Lights</strong>
+            <small>NASA Black Marble</small>
+          </div>
+          <span class="active-dot" aria-label="Selected"></span>
+        </div>
+
+        <p class="note">
+          Additional Earth data layers will be added
+          after the Night Lights experience is complete.
+        </p>
+
+        <hr>
+
+        <label for="regionSelect">Explore a Region</label>
+        <select id="regionSelect">
+          <option value="">Choose a region</option>
+          <option value="riyadh">Riyadh, Saudi Arabia</option>
+          <option value="delhi">Delhi, India</option>
+          <option value="london">London, United Kingdom</option>
+        </select>
+
+        <p class="helper">
+          Drag to rotate · Scroll to zoom · Click Earth
+          to focus · Or select a region above.
+        </p>
+
+        <button id="resetView" class="secondary-btn">
+          <span aria-hidden="true">↺</span> Reset View
+        </button>
+      </aside>
+
+      <!-- 3D globe -->
+      <section class="globe-section" aria-label="3D Earth explorer">
+        <div class="globe-head">
+          <span class="live-tag">● NASA VISUALIZATION</span>
+          <span class="globe-hint">INTERACTIVE 3D</span>
+        </div>
+
+        <div id="globeCanvas" class="globe-canvas"
+             aria-label="Interactive NASA Earth at night globe">
+        </div>
+
+        <p class="globe-caption">
+          NASA SVS imagery · Visualization preview
+        </p>
+
+        <video id="nasaVideo" muted loop playsinline
+               preload="auto" hidden>
+          <source src="assets/nasa-timeline.mp4" type="video/mp4">
+        </video>
+      </section>
+
+      <!-- Right panel -->
+      <aside class="panel">
+        <span class="section-tag">02 / EXPLORATION</span>
+        <h2>Region Details</h2>
+
+        <div class="detail">
+          <span>SELECTED LOCATION</span>
+          <strong id="regionName">Global View</strong>
+        </div>
+
+        <div class="detail">
+          <span>COORDINATES</span>
+          <strong id="coordinates">Select a location</strong>
+        </div>
+
+        <div class="detail">
+          <span>CURRENT YEAR SELECTION</span>
+          <strong id="detailYear">2012</strong>
+        </div>
+
+        <div class="detail">
+          <span>LIGHT INTENSITY</span>
+          <strong class="pending">Awaiting NASA Data</strong>
+        </div>
+
+        <div class="description">
+          <h3>Scientific Description</h3>
+          <p id="regionDescription">
+            Choose a location to explore its nighttime
+            illumination. Verified numerical measurements
+            will appear when data processing is complete.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Bottom timeline -->
+    <section class="timeline-panel">
+      <div class="timeline-heading">
+        <div>
+          <span class="section-tag">03 / TIME EXPLORATION</span>
+          <h2>Journey Through Time</h2>
+        </div>
+        <strong id="yearDisplay">2012</strong>
+      </div>
+
+      <div class="timeline-controls">
+        <button id="playTimeline" class="primary-btn">
+          ▶ Preview Timeline
+        </button>
+
+        <div class="slider-wrap">
+          <label for="yearSlider">Select Year</label>
+          <input id="yearSlider" type="range"
+                 min="2012" max="2023"
+                 step="1" value="2012">
+          <div class="years">
+            <span>2012</span>
+            <span>2023</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="timeline-notice">
+        Timeline controls are a UI preview. The NASA animation
+        currently plays independently; year-by-year
+        synchronization and sonification are not connected yet.
+      </p>
+
+      <div class="audio-placeholder">
+        <span>♫ Sound Time Machine</span>
+        <button disabled aria-label="Audio coming soon">
+          Audio Coming Soon
+        </button>
+      </div>
+    </section>
+
+    <p id="globeStatus" role="status" aria-live="polite"
+       class="screen-status">Loading NASA visualization...</p>
+
+    <footer>
+      NASA Scientific Visualization Studio ·
+      Earth at Night / Black Marble ·
+      Team SONOVA
+    </footer>
+  </main>
+</body>
+</html>
